@@ -1,0 +1,49 @@
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        
+     /*   int ans = INT_MIN;
+        int n = nums.size();
+        
+        for(int index=0;index<n;index++)
+        {
+            int sum=0;
+            for(int subarray=1;subarray<=n;subarray++)
+            {
+                if(index+subarray>n)
+                {
+                    break;
+                }
+                
+                sum += nums[index+subarray-1];
+                ans = max(ans,sum);
+            }
+            
+        }
+        
+        return ans;
+        */
+        
+        int n = nums.size();
+        int max = INT_MIN;
+        int curr = 0;
+        
+        for(int i=0;i<n;i++)
+        {                                              // KADANE's Algorithm
+            curr += nums[i];
+            
+            if(curr>max)      
+            {
+                max = curr;
+            }
+            if(curr<0)
+            {
+                curr = 0;
+            }
+        }
+        
+        return max;
+
+              
+    }
+};
