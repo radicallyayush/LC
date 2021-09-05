@@ -1,0 +1,52 @@
+class Solution {
+public:
+    vector<int> dp;
+    vector<vector<int>> G;
+    vector<int> cnt_arr;
+    vector<int> ans;
+    vector<int> level;
+    int sum = 0;
+    int tot = 0;
+    int dfs(int u, int p, int l) {
+        int cnt = 1;
+        int val = 1;
+        tot++;
+        level[u] = l;
+        for(auto it : G[u]) {
+            if(it != p) {
+                val+= dfs(it, u, l+1);
+                cnt+= cnt_arr[it];
+            }
+        }
+        cnt_arr[u] = cnt;
+        return val;
+    }
+
+    void dfs2(int u, int p) {
+        for(auto it : G[u]) {
+            if(it != p) {
+                int node_blw = cnt_arr[it];
+                int temp_sum = ans[u] - node_blw + (tot - node_blw);
+                ans[it] = temp_sum;
+                dfs2(it, u);
+            }
+        }
+    }
+    vector<int> sumOfDistancesInTree(int N, vector<vector<int>>& edges) {
+        G = vector<vector<int>>(N);
+        for(auto it : edges) {
+            G[it[0]].push_back(it[1]);
+            G[it[1]].push_back(it[0]);
+        }
+        cnt_arr = vector<int>(N, 0);
+        ans = vector<int>(N, 0);
+        level = vector<int>(N, 0);
+        int val = dfs(0, -1, 0);
+        for(int i=0; i<N; i++) {
+            sum+= level[i];
+        }
+        ans[0] = sum;
+        dfs2(0, -1);
+        return ans;
+    }
+};
